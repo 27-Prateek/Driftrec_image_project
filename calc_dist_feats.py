@@ -79,8 +79,20 @@ def main():
         gt_dir, enh_dir = args.gt_dir, args.enh_dir
         gt_feats_file = os.path.join(gt_dir, "feats.npy")
         enh_feats_file = os.path.join(enh_dir, "feats.npy")
-        gt_filelist = list(sorted(glob.glob(os.path.join(gt_dir, "*.png"))))
-        enh_filelist = list(sorted(glob.glob(os.path.join(enh_dir, "*.png"))))
+        # gt_filelist = list(sorted(glob.glob(os.path.join(gt_dir, "*.png"))))
+        # enh_filelist = list(sorted(glob.glob(os.path.join(enh_dir, "*.png"))))
+
+        gt_filelist = sorted(
+            glob.glob(os.path.join(gt_dir, "*.png")) +
+            glob.glob(os.path.join(gt_dir, "*.jpg")) +
+            glob.glob(os.path.join(gt_dir, "*.jpeg"))
+        )
+
+        enh_filelist = sorted(
+            glob.glob(os.path.join(enh_dir, "*.png")) +
+            glob.glob(os.path.join(enh_dir, "*.jpg")) +
+            glob.glob(os.path.join(enh_dir, "*.jpeg"))
+        )
 
         gt_basenames = [os.path.basename(f) for f in gt_filelist]
         enh_basenames = [os.path.basename(f) for f in enh_filelist]

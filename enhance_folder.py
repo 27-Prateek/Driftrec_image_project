@@ -93,6 +93,33 @@ def main():
         print("Using EMA" if args.ema else "NOT using EMA")
         model.eval(no_ema=not args.ema)
 
+                # ===== 8-BIT WEIGHT CONVERSION =====
+        print("⚡ Converting model weights to 8-bit...")
+
+        quant_state_dict = {}
+
+        for k, v in model.state_dict().items():
+            if v.dtype == torch.float32:
+                scale = v.abs().max() / 127
+                if scale == 0:
+                    quant_state_dict[k] = (v, 1.0)
+                    continue
+                q = torch.clamp((v / scale).round(), -128, 127).to(torch.int8)
+                quant_state_dict[k] = (q, scale)
+            else:
+                quant_state_dict[k] = v
+
+        # SAVE 8-bit checkpoint
+        torch.save(
+            {
+                "quantized_state_dict": quant_state_dict,
+                "note": "Weights stored as int8 with scale"
+            },
+            "model_int8.ckpt"
+        )
+
+        print("✅ Saved 8-bit model: model_int8.ckpt")
+
         # The following code loads the image files (*.png) from the indir and saves the enhanced versions
         # to the outdir using the same basename filenames. Enhancing happens via sampling_fn.
 
@@ -128,7 +155,7 @@ def main():
                 cropslices.append(cropslice)
             return torch.stack(padded_imgs, dim=0), filenames, cropslices
 
-        dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=False, num_workers=4, collate_fn=collate_fn)
+        dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=False, num_workers=0,collate_fn=collate_fn)
 
         nfes = []  # unused for now, but could save this as well
 
@@ -157,7 +184,7 @@ def main():
                     e = F.to_pil_image(e.clamp(min=0.0, max=1.0))
                     # Save the enhanced image
                     e.save(fout)
-                    i += 1
+                    i += 1  
 
 
 if __name__ == '__main__':

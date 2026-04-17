@@ -9,7 +9,10 @@ import pytorch_lightning as pl
 from torch_ema import ExponentialMovingAverage
 from torchvision.utils import make_grid
 
-import wandb
+try:
+    import wandb
+except ImportError:
+    wandb = None
 
 from driftrec import sampling
 from driftrec.sdes import SDERegistry
@@ -161,7 +164,18 @@ class Model(pl.LightningModule, abc.ABC):
     def on_save_checkpoint(self, checkpoint):
         checkpoint['ema'] = self.ema.state_dict()
 
-    def train(self, mode, no_ema=False):
+    # def train(self, mode=True, no_ema=False):
+    #     res = super().train(mode)  # call the standard `train` method with the given mode
+    #     if mode == False and not no_ema:
+    #         # eval
+    #         self.ema.store(self.parameters())        # store current params in EMA
+    #         self.ema.copy_to(self.parameters())      # copy EMA parameters over current params for evaluation
+    #     else:
+    #         # train
+    #         if self.ema.collected_params is not None:
+    #             self.ema.restore(self.parameters())  # restore the EMA weights (if stored)
+    #     return res
+    def train(self, mode=True, no_ema=False):
         res = super().train(mode)  # call the standard `train` method with the given mode
         if mode == False and not no_ema:
             # eval

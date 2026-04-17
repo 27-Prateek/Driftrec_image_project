@@ -80,10 +80,34 @@ if __name__ == '__main__':
      callbacks += [valid_loss_callback]
 
      # Initialize the Trainer and the DataModule
+     
+     # trainer = pl.Trainer.from_argparse_args(
+     #      argparse.Namespace(**arg_groups["pl.Trainer"]), strategy=DDPStrategy(find_unused_parameters=False),
+     #      logger=logger, log_every_n_steps=10, callbacks=callbacks
+     # )
+
+
+     # trainer = pl.Trainer.from_argparse_args(
+     #     argparse.Namespace(**arg_groups["pl.Trainer"]),
+     #     accelerator="gpu",
+     #     devices=1,
+     #     strategy="auto",
+     #     logger=logger,
+     #     log_every_n_steps=10,
+     #     callbacks=callbacks
+     # )
+  
+
      trainer = pl.Trainer.from_argparse_args(
-          argparse.Namespace(**arg_groups["pl.Trainer"]), strategy=DDPStrategy(find_unused_parameters=False),
-          logger=logger, log_every_n_steps=10, callbacks=callbacks
+          argparse.Namespace(**arg_groups["pl.Trainer"]),
+          accelerator="gpu",
+          devices=1,
+          # Remove strategy parameter entirely, or use a valid one
+          logger=logger,
+          log_every_n_steps=10,
+          callbacks=callbacks
      )
+
      # A bit of a hack to force construction of the datasets before `trainer.fit`
      model.data_module.setup(stage="fit")
      txtlogger.info(f"Training with {len(model.data_module.ds_train)} data points")

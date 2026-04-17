@@ -19,8 +19,20 @@ def main():
     args = parser.parse_args()
 
     tgt_dir, enh_dir = args.tgt_dir, args.enh_dir
-    tgt_filelist = list(sorted(glob.glob(os.path.join(tgt_dir, "*.png"))))
-    enh_filelist = list(sorted(glob.glob(os.path.join(enh_dir, "*.png"))))
+    # tgt_filelist = list(sorted(glob.glob(os.path.join(tgt_dir, "*.png"))))
+    # enh_filelist = list(sorted(glob.glob(os.path.join(enh_dir, "*.png"))))
+
+    tgt_filelist = sorted(
+        glob.glob(os.path.join(tgt_dir, "*.png")) +
+        glob.glob(os.path.join(tgt_dir, "*.jpg")) +
+        glob.glob(os.path.join(tgt_dir, "*.jpeg"))
+    )
+
+    enh_filelist = sorted(
+        glob.glob(os.path.join(enh_dir, "*.png")) +
+        glob.glob(os.path.join(enh_dir, "*.jpg")) +
+        glob.glob(os.path.join(enh_dir, "*.jpeg"))
+    )
 
     tgt_basenames = [os.path.basename(f) for f in tgt_filelist]
     enh_basenames = [os.path.basename(f) for f in enh_filelist]

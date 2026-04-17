@@ -101,5 +101,10 @@ class RandomDegradations:
         self.corruptions = corruptions
         self.transform = T.RandomChoice(self.corruptions)
 
-    def __call__(self, img: torch.Tensor):
+    # def __call__(self, img: torch.Tensor):
+        # return self.transform(img)
+    def __call__(self, img):
+        # if self.transform is None or (hasattr(self.transform, 'transforms') and len(self.transform.transforms) == 0):
+        if not self.corruptions or self.transform is None:
+            return img  # Return image unchanged if no degradations
         return self.transform(img)
