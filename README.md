@@ -6,8 +6,8 @@ This project focuses on restoring JPEG-compressed images using a pretrained Drif
 
 ## 🎥 Video Explanations
 
-* [**Mid Sem Video Explanation**]https://drive.google.com/drive/folders/1rORx2xkMpNZ9PUSA-P44Oqy7Ix7tWxpW?usp=sharing
-* [**End Sem Video Explanation**]https://drive.google.com/drive/folders/1SG0L6ZvqNzK6G2UUK7SMOweHpy9VhOdB?usp=drive_link
+* PHASE1- https://drive.google.com/drive/folders/1rORx2xkMpNZ9PUSA-P44Oqy7Ix7tWxpW?usp=sharing
+* PHASE2- https://drive.google.com/drive/folders/1SG0L6ZvqNzK6G2UUK7SMOweHpy9VhOdB?usp=drive_link
 
 ## ⚙️ 1. Setup
 
